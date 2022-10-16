@@ -55,6 +55,7 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null),
         location: null,
+        isSelected: false,
       }],
       stepNumber: 0,
     };
@@ -79,6 +80,18 @@ class Game extends React.Component {
     });
   }
 
+  jumpTo(move) {
+    let history = this.state.history.slice();
+    history.map(x => x.isSelected = false);
+    history[move].isSelected = true;
+
+    this.setState({
+      history,
+      stepNumber: move,
+      xIsNext: (move % 2) === 0,
+    });
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -88,7 +101,12 @@ class Game extends React.Component {
       const desc = move ? `Go to move #${move} ${step.location}` : 'Go to Start Index';
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => this.jumpTo(move)}>
+            <>
+            </>
+            {step.isSelected && <b>{desc}</b>}
+            {!step.isSelected && <span>{desc}</span>}
+          </button>
         </li>
       );
     });
@@ -114,13 +132,6 @@ class Game extends React.Component {
         </div>
       </div>
     );
-  }
-
-  jumpTo(move) {
-    this.setState({
-      stepNumber: move,
-      xIsNext: (move % 2) === 0,
-    });
   }
 }
 
