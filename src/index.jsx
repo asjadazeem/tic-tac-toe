@@ -60,6 +60,7 @@ class Game extends React.Component {
         isSelected: false,
       }],
       stepNumber: 0,
+      sortAscending: true,
     };
   }
 
@@ -99,7 +100,8 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
+    const copyOfHistory = this.state.sortAscending ? history : history.reverse();
+    const moves = copyOfHistory.map((step, move) => {
       const desc = move ? `Go to move #${move} ${step.location}` : 'Go to Start Index';
       return (
         <li key={move}>
@@ -130,6 +132,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <button onClick={() => this.setState({ sortAscending: !this.state.sortAscending }) }>Sort moves</button>
           <ol>{moves}</ol>
         </div>
       </div>
